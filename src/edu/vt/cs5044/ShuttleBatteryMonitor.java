@@ -1,5 +1,7 @@
 package edu.vt.cs5044;
 
+import java.text.DecimalFormat;
+
 /**
  * A basic system to track the energy usage of an experimental electric shuttle bus as it operates.
  * The dedicated route is perfectly straight, and consists of equal length blocks, numbered
@@ -27,6 +29,8 @@ package edu.vt.cs5044;
  * great exercise to produce a solution without them anyway.
  *
  * Template and Comments © 2022 Prof. Oliva (for Spring 2022)
+ * @author James Smith (Jfs8888@vt.edu)
+ * @version Project 1
  */
 public class ShuttleBatteryMonitor {
     int shuttleShortRate;
@@ -34,6 +38,12 @@ public class ShuttleBatteryMonitor {
     int shuttleLongRate;
     int shuttleChargeCapacity;
     int currentShuttleCharge;
+    int currentPassengerCount;
+    int currentShuttleLocation;
+    int currentDistance;
+    int totalTrips;
+    int totalUsage;
+    double currentShuttlePercentCharge;
     /**
      * Construct a new instance of the monitor with the specified configuration. The shuttle begins
      * at block zero, with no passengers on board, and the battery fully charged to capacity.
@@ -51,12 +61,8 @@ public class ShuttleBatteryMonitor {
         shuttleLongRate = longRate;
         shuttleChargeCapacity = chargeCapacity;
         currentShuttleCharge = chargeCapacity;
-
-        //Delete this afterwards //TEST
-        System.out.println(shuttleShortRate); //9
-        System.out.println(shuttleShortLimit); //8
-        System.out.println(shuttleLongRate);// 12
-        System.out.println(shuttleChargeCapacity);// 4500
+        currentPassengerCount = 0;
+        totalUsage = 0;
     }
 
     /**
@@ -71,12 +77,17 @@ public class ShuttleBatteryMonitor {
      * @param destination block number for the end of this trip
      */
     public void travelTo(int destination) {
-        int tripCalc = Math.max(0, shuttleLongRate - destination);
-        tripCalc = Math.max(tripCalc, shuttleShortLimit);
-        currentShuttleCharge = currentShuttleCharge - (tripCalc*destination);
-        System.out.println(shuttleChargeCapacity);
+        currentDistance = Math.abs(currentShuttleLocation - destination);
+        currentShuttleLocation = destination;
+        int tripDistance = currentDistance - shuttleShortLimit;
+        int testLongDistance = Math.max(0, tripDistance);
+        currentShuttleCharge -= testLongDistance * currentPassengerCount * shuttleLongRate;
+        totalUsage += testLongDistance * currentPassengerCount * shuttleLongRate;
+        int testShortDistance = Math.min(currentDistance, shuttleShortLimit);
+        currentShuttleCharge -= testShortDistance * currentPassengerCount * shuttleShortRate;
+        totalUsage += testShortDistance * currentPassengerCount * shuttleShortRate;
+        totalTrips++;
     }
-
     /**
      * Indicates travel of the shuttle to the specified block number. Any distance up to the short
      * limit uses energy at the normal rate. Any distance beyond the short limit uses energy at the
@@ -90,8 +101,20 @@ public class ShuttleBatteryMonitor {
      * @param longRateOverride usage rate, per block per passenger, for portion of travel beyond
      * short trip (this trip only)
      */
+
     public void travelTo(int destination, int shortLimitOverride, int longRateOverride) {
-        // TODO: Your implementation goes here
+
+
+        currentDistance = Math.abs(currentShuttleLocation - destination);
+        currentShuttleLocation = destination;
+        int tripDistance = currentDistance - shortLimitOverride;
+        int testLongDistance = Math.max(0, tripDistance);
+        currentShuttleCharge -= testLongDistance * currentPassengerCount * longRateOverride;
+        totalUsage += testLongDistance * currentPassengerCount * longRateOverride;
+        int testShortDistance = Math.min(currentDistance, shortLimitOverride);
+        currentShuttleCharge -= testShortDistance * currentPassengerCount * shuttleShortRate;
+        totalUsage += testLongDistance * currentPassengerCount * longRateOverride;
+        totalTrips++;
     }
 
     /**
@@ -101,6 +124,8 @@ public class ShuttleBatteryMonitor {
      * battery to full capacity.
      */
     public void recharge() {
+        totalTrips++;
+        currentShuttleLocation = 0;
         currentShuttleCharge = shuttleChargeCapacity;
     }
 
@@ -117,7 +142,7 @@ public class ShuttleBatteryMonitor {
      * @param netAddedPassengers net count of passengers added to the shuttle
      */
     public void loadPassengers(int netAddedPassengers) {
-        // TODO: Your implementation goes here
+        currentPassengerCount = currentPassengerCount + netAddedPassengers;
     }
 
     /**
@@ -126,8 +151,7 @@ public class ShuttleBatteryMonitor {
      * @return current block number
      */
     public int getLocation() {
-        // TODO: Your implementation goes here
-        return 0; // TODO: Replace this placeholder
+        return currentShuttleLocation;
     }
 
     /**
@@ -136,8 +160,7 @@ public class ShuttleBatteryMonitor {
      * @return the current passenger count
      */
     public int getPassengerCount() {
-        // TODO: Your implementation goes here
-        return 0; // TODO: Replace this placeholder
+        return currentPassengerCount;
     }
 
     /**
@@ -150,8 +173,10 @@ public class ShuttleBatteryMonitor {
      * @return truncated percentage of energy remaining in the batteries.
      */
     public double getChargeRemaining() {
-        // TODO: Your implementation goes here
-        return 0; // TODO: Replace this placeholder
+        currentShuttlePercentCharge = (currentShuttleCharge / (double)shuttleChargeCapacity)*100.0;
+        DecimalFormat correctNumber = new DecimalFormat("##.#");
+        currentShuttlePercentCharge = Double.parseDouble(correctNumber.format(currentShuttlePercentCharge));
+        return currentShuttlePercentCharge;
     }
 
     /**
@@ -166,8 +191,8 @@ public class ShuttleBatteryMonitor {
      * @return truncated average amount of energy used per trip.
      */
     public double getAverageUsagePerTrip() {
-        // TODO: Your implementation goes here
-        return 0; // TODO: Replace this placeholder
+        double remainingCharge = totalUsage / totalTrips;
+        return remainingCharge;
     }
 
     /**
@@ -183,8 +208,8 @@ public class ShuttleBatteryMonitor {
      *
      */
     public int getEstimatedTripsRemaining() {
-        // TODO: Your implementation goes here
-        return 0; // TODO: Replace this placeholder
+        int estimatedTrips = (int)currentShuttleCharge / (int)getAverageUsagePerTrip();
+        return estimatedTrips;
     }
 
 }
