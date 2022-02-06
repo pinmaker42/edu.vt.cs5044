@@ -39,6 +39,70 @@ public class ShuttleBatteryMonitorTester {
         System.out.println("U/T     expected: 128.5; actual: " + sbm.getAverageUsagePerTrip());
         System.out.println("#Trips  expected: 34;    actual: " + sbm.getEstimatedTripsRemaining());
 
-        // TODO: Place your additional test cases here...
+        ShuttleBatteryMonitor shuttleEnterprise = new ShuttleBatteryMonitor(9, 8, 12, 4500);
+        shuttleEnterprise.travelTo(5);
+        shuttleEnterprise.loadPassengers(10);
+        shuttleEnterprise.travelTo(9);
+        shuttleEnterprise.loadPassengers(0);
+        shuttleEnterprise.loadPassengers(0);
+        shuttleEnterprise.travelTo(18);
+
+        System.out.println();
+        System.out.println("Sample Test Case - Part 3");
+        System.out.println("shuttleEnterprise(9,8,12,4500)t(5)l(10)t(9)l(0)l(0)t(18)");
+        System.out.println("Loc     expected: 18;    actual: " + shuttleEnterprise.getLocation());
+        System.out.println("#Pass   expected: 10;     actual: " + shuttleEnterprise.getPassengerCount());
+        System.out.println("%Charge expected: 73.3;  actual: " + shuttleEnterprise.getChargeRemaining());
+        System.out.println("U/T     expected: 400.0; actual: " + shuttleEnterprise.getAverageUsagePerTrip());
+        System.out.println("#Trips  expected: 8;    actual: " + shuttleEnterprise.getEstimatedTripsRemaining());
+
+        shuttleEnterprise.recharge();
+        shuttleEnterprise.loadPassengers(-10);
+        shuttleEnterprise.travelTo(100);
+        shuttleEnterprise.travelTo(-100);
+
+        System.out.println();
+        System.out.println("Sample Test Case - Part 4");
+        System.out.println("shuttleEnterprise(9,8,12,4500)t(5)l(10)t(9)l(0)l(0)t(18)");
+        System.out.println("Loc     expected: -100;    actual: " + shuttleEnterprise.getLocation());
+        System.out.println("#Pass   expected: 0;     actual: " + shuttleEnterprise.getPassengerCount());
+        System.out.println("%Charge expected: 100.0;  actual: " + shuttleEnterprise.getChargeRemaining());
+        System.out.println("U/T     expected: 520.0; actual: " + shuttleEnterprise.getAverageUsagePerTrip());
+        System.out.println("#Trips  expected: 8;    actual: " + shuttleEnterprise.getEstimatedTripsRemaining());
+
+        ShuttleBatteryMonitor shuttleVoyager = new ShuttleBatteryMonitor(9, 8, 12, 4500);
+        shuttleVoyager.travelTo(5);
+        shuttleVoyager.loadPassengers(0);
+        shuttleVoyager.travelTo(9);
+        shuttleVoyager.loadPassengers(0);
+        shuttleVoyager.loadPassengers(0);
+        shuttleVoyager.travelTo(18);
+
+        System.out.println();
+        System.out.println("Sample Test Case - Part 5");
+        System.out.println("shuttleVoyager(9,8,12,4500)t(5)l(10)t(9)l(0)l(0)t(18)");
+        System.out.println("Loc     expected: 18;    actual: " + shuttleVoyager.getLocation());
+        System.out.println("#Pass   expected: 0;     actual: " + shuttleVoyager.getPassengerCount());
+        System.out.println("%Charge expected: 100.0;  actual: " + shuttleVoyager.getChargeRemaining());
+        System.out.println("U/T     expected: 0.0; actual: " + shuttleVoyager.getAverageUsagePerTrip());
+        System.out.println("#Trips  expected: 2147483647;    actual: " + shuttleVoyager.getEstimatedTripsRemaining());
+
+        shuttleVoyager.recharge();
+        shuttleVoyager.recharge();
+        shuttleVoyager.recharge();
+        shuttleVoyager.loadPassengers( 100);
+        shuttleVoyager.travelTo(10,5,20);
+        shuttleVoyager.recharge();
+        shuttleVoyager.recharge();
+        shuttleVoyager.recharge();
+
+        System.out.println();
+        System.out.println("Sample Test Case - Part 6");
+        System.out.println("shuttleVoyager(9,8,12,4500)t(5)l(10)t(9)l(0)l(0)t(18)");
+        System.out.println("Loc     expected: 0;    actual: " + shuttleVoyager.getLocation());
+        System.out.println("#Pass   expected: 100;     actual: " + shuttleVoyager.getPassengerCount());
+        System.out.println("%Charge expected: 100.0;  actual: " + shuttleVoyager.getChargeRemaining());
+        System.out.println("U/T     expected: 2410.0; actual: " + shuttleVoyager.getAverageUsagePerTrip());
+        System.out.println("#Trips  expected: 1;    actual: " + shuttleVoyager.getEstimatedTripsRemaining());
     }
 }
