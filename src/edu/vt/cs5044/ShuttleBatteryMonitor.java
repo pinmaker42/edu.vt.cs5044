@@ -72,7 +72,8 @@ public class ShuttleBatteryMonitor {
      * Repeatable code meant to aid with the TravelTo methods
      *
      * Takes the parameters and calculates it based off short limit
-     * and long rates depending on what the destination is
+     * and long rates depending on what the destination is.  The logic behind this is
+     * figuring out
      *
      * @param destination block number for the end of this trip
      * @param shortLimit max number of blocks that comprise a short trip (this trip only)

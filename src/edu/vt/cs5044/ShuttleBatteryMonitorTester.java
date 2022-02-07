@@ -77,6 +77,9 @@ public class ShuttleBatteryMonitorTester {
         shuttleVoyager.loadPassengers(0);
         shuttleVoyager.loadPassengers(0);
         shuttleVoyager.travelTo(18);
+        shuttleVoyager.recharge();
+        shuttleVoyager.travelTo(5, 10, 20);
+        shuttleVoyager.travelTo(18, 10, 20);
 
         System.out.println();
         System.out.println("Sample Test Case - Part 5");
@@ -102,7 +105,7 @@ public class ShuttleBatteryMonitorTester {
         System.out.println("Loc     expected: 0;    actual: " + shuttleVoyager.getLocation());
         System.out.println("#Pass   expected: 100;     actual: " + shuttleVoyager.getPassengerCount());
         System.out.println("%Charge expected: 100.0;  actual: " + shuttleVoyager.getChargeRemaining());
-        System.out.println("U/T     expected: 2410.0; actual: " + shuttleVoyager.getAverageUsagePerTrip());
-        System.out.println("#Trips  expected: 1;    actual: " + shuttleVoyager.getEstimatedTripsRemaining());
+        System.out.println("U/T     expected: 1853.80; actual: " + shuttleVoyager.getAverageUsagePerTrip());
+        System.out.println("#Trips  expected: 2;    actual: " + shuttleVoyager.getEstimatedTripsRemaining());
     }
 }
